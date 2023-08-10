@@ -85,8 +85,14 @@ public class OctoConfig {
     public final ConfigProperty<Boolean> downloadBoost = new ConfigProperty<>("downloadBoost", false);
     public final ConfigProperty<String> downloadBoostValue = new ConfigProperty<>("downloadBoostValue", "Default");
 
+    /*Folders*/
+    public static final String TAB_TYPE_TEXT = "Titles";
+    public static final String TAB_TYPE_MIX = "Mixed";
+    public static final String TAB_TYPE_ICON = "Icon";
+    public final ConfigProperty<String> tabMode = new ConfigProperty<>("tabMode", "Mixed");
 
-    private final List<ConfigProperty<?>> properties = List.of(
+
+    private final    List<ConfigProperty<?>> properties = List.of(
             hidePhoneNumber, showFakePhoneNumber, hideOtherPhoneNumber, promptBeforeCalling, dcIdStyle, registrationDateInProfiles,
             jumpToNextChannel, hideGreetingSticker, playGifAsVideo, hideKeyboardOnScroll, hideSendAsChannel, showOnlineStatus,
             hideCustomEmojis, activeNoiseSuppression, unmuteVideosWithVolumeDown, disableProximityEvents, startWithRearCamera,

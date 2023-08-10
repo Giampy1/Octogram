@@ -124,6 +124,11 @@
     <string name="DownloadBoostType">Download Boost type</string>
     <string name="Fast">Fast</string>
     <string name="Extreme">Extreme</string>
+    <string name="FoldersType">Folders Type</string>
+    <string name="FoldersTypeTitles">Titles</string>
+    <string name="FoldersTypeIcons">Icons</string>
+    <string name="FoldersTypeIconsTitles">Mixed</string>
+    <string name="ChooseFolderIcon">Choose an Icon</string>
 
     <!-- OLD STRINGS -->
     <!--<string name="TestBackendNumber">Test Number</string>

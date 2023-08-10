@@ -9,15 +9,24 @@
 package it.octogram.android.preferences.ui;
 
 import android.content.Context;
+import android.util.Pair;
 
-import it.octogram.android.preferences.rows.impl.*;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.BaseFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.octogram.android.OctoConfig;
 import it.octogram.android.preferences.OctoPreferences;
 import it.octogram.android.preferences.PreferencesEntry;
+import it.octogram.android.preferences.rows.impl.HeaderRow;
+import it.octogram.android.preferences.rows.impl.ListRow;
+import it.octogram.android.preferences.rows.impl.SliderChooseRow;
+import it.octogram.android.preferences.rows.impl.SliderRow;
+import it.octogram.android.preferences.rows.impl.SwitchRow;
+import it.octogram.android.preferences.rows.impl.TextDetailRow;
 
 public class OctoAppearanceUI implements PreferencesEntry {
 
@@ -80,6 +89,17 @@ public class OctoAppearanceUI implements PreferencesEntry {
                             .preferenceValue(OctoConfig.INSTANCE.useSystemFont)
                             .title(LocaleController.getString("UseSystemFont", R.string.UseSystemFont))
                             .requiresRestart(true)
+                            .build());
+                })
+                .category("Folder Style", category -> {
+                    category.row(new SliderChooseRow.SliderChooseRowBuilder()
+                            .options(new ArrayList<>() {{
+                                add(new Pair<>(0, LocaleController.getString(R.string.FoldersTypeIcons)));
+                                add(new Pair<>(1, LocaleController.getString(R.string.FoldersTypeIconsTitles)));
+                                add(new Pair<>(2, LocaleController.getString(R.string.FoldersTypeTitles)));
+                            }})
+                            .preferenceValue(OctoConfig.INSTANCE.tabMode)
+                            .title("Folder Style")
                             .build());
                 })
                 .category(LocaleController.getString("ArchiveHeader", R.string.ArchiveHeader), category -> {
