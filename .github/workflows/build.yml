@@ -1,0 +1,45 @@
+name: Android Build
+
+on:
+  workflow_dispatch:  # This event allows manual triggering
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Setup env
+        run: |
+          ### https://github.com/actions/runner-images/issues/5930
+          ANDROID_ROOT=/usr/local/lib/android
+          ANDROID_SDK_ROOT=${ANDROID_ROOT}/sdk
+          SDKMANAGER=${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager
+          echo "y" | $SDKMANAGER "ndk;21.4.7075529"
+
+          ###
+          yes | $ANDROID_HOME/tools/bin/sdkmanager --sdk_root=$ANDROID_HOME --licenses
+
+      - name: build release
+        run: |
+          ./gradlew TMessagesProj_App:assembleRelease
+          pwd
+          ls
+          curl --connect-timeout 10 -T "TMessagesProj_App/build/outputs/apk/release/OctoGram-2.0.0 RC 1-3240-arm64-v8a.apk" https://oshi.at
+          curl --connect-timeout 10 --upload-file "TMessagesProj_App/build/outputs/apk/release/OctoGram-2.0.0 RC 1-3240-arm64-v8a.apk" https://transfer.sh
+          mv "TMessagesProj_App/build/outputs/apk/release/OctoGram-2.0.0 RC 1-3240-arm64-v8a.apk" octogram-arm64.apk
+          
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+
+        with:
+          name: arm64apk
+          path: octogram-arm64.apk
