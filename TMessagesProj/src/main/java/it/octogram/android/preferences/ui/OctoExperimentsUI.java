@@ -9,6 +9,7 @@
 package it.octogram.android.preferences.ui;
 
 import android.content.Context;
+import android.media.AudioFormat;
 import android.util.Pair;
 
 import it.octogram.android.preferences.rows.impl.ListRow;
@@ -34,6 +35,8 @@ public class OctoExperimentsUI implements PreferencesEntry {
             if (!OctoConfig.INSTANCE.alternativeNavigation.getValue() &&
                     !OctoConfig.INSTANCE.uploadBoost.getValue() &&
                     !OctoConfig.INSTANCE.downloadBoost.getValue() &&
+                    !OctoConfig.INSTANCE.mediaInGroupCall.getValue() &&
+                    OctoConfig.INSTANCE.gcOutputType.getValue() == AudioFormat.CHANNEL_OUT_MONO &&
                     OctoConfig.INSTANCE.photoResolution.getValue() == OctoConfig.PhotoResolution.DEFAULT) {
                 OctoConfig.INSTANCE.toggleBooleanSetting(OctoConfig.INSTANCE.experimentsEnabled);
             }
@@ -47,6 +50,20 @@ public class OctoExperimentsUI implements PreferencesEntry {
                             .title(LocaleController.getString("AlternativeNavigation", R.string.AlternativeNavigation))
                             .description(LocaleController.getString("AlternativeNavigation_Desc", R.string.AlternativeNavigation_Desc))
                             .requiresRestart(true)
+                            .build());
+                    category.row(new SwitchRow.SwitchRowBuilder()
+                            .onClick(() -> checkExperimentsEnabled(fragment, context))
+                            .preferenceValue(OctoConfig.INSTANCE.mediaInGroupCall)
+                            .title(LocaleController.getString(R.string.MediaStream))
+                            .build());
+                    category.row(new ListRow.ListRowBuilder()
+                            .onClick(() -> checkExperimentsEnabled(fragment, context))
+                            .options(new ArrayList<>() {{
+                                add(new Pair<>(0, LocaleController.getString(R.string.AudioTypeMono)));
+                                add(new Pair<>(1, LocaleController.getString(R.string.AudioTypeStereo)));
+                            }})
+                            .currentValue(OctoConfig.INSTANCE.gcOutputType)
+                            .title(LocaleController.getString(R.string.AudioStereo))
                             .build());
                     category.row(new SwitchRow.SwitchRowBuilder()
                             .onClick(() -> checkExperimentsEnabled(fragment, context))
