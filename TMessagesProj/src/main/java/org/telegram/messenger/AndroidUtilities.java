@@ -702,6 +702,9 @@ public class AndroidUtilities {
     public static void getViewPositionInParent(View view, ViewGroup parent, float[] pointPosition) {
         pointPosition[0] = 0;
         pointPosition[1] = 0;
+        if (view == null || parent == null) {
+            return;
+        }
         View currentView = view;
         while (currentView != parent) {
             //fix strange offset inside view pager
@@ -753,6 +756,22 @@ public class AndroidUtilities {
         // Set alpha based on your logic, here I'm making it 25% of it's initial value.
         alpha *= opacity;
         return Color.argb(alpha, red, green, blue);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void getBitmapFromSurface(Surface surface, Bitmap surfaceBitmap) {
+        if (surface == null || !surface.isValid()) {
+            return;
+        }
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        PixelCopy.request(surface, surfaceBitmap, copyResult -> {
+            countDownLatch.countDown();
+        }, Utilities.searchQueue.getHandler());
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static float[] getCoordinateInParent(ViewGroup parentView, View view) {
@@ -2486,7 +2505,7 @@ public class AndroidUtilities {
 
     public static int getPhotoSize() {
         if (photoSize == null) {
-            photoSize = 1280;
+            photoSize = 2560;
         }
         return photoSize;
     }
@@ -5487,5 +5506,13 @@ public class AndroidUtilities {
         clone.flip();
         clone.position(position);
         return clone;
+    }
+
+    public static void checkAndroidTheme(Context context, boolean open) {
+        // this hack is done to support prefers-color-scheme in webviews 🤦
+        if (context == null) {
+            return;
+        }
+        context.setTheme(Theme.isCurrentThemeDark() && open ? R.style.Theme_TMessages_Dark : R.style.Theme_TMessages);
     }
 }

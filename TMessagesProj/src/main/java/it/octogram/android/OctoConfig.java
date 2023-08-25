@@ -35,6 +35,7 @@ public class OctoConfig {
     /*General*/
     public final ConfigProperty<Boolean> hidePhoneNumber = new ConfigProperty<>("hidePhoneNumber", true);
     public final ConfigProperty<Boolean> showFakePhoneNumber = new ConfigProperty<>("showFakePhoneNumber", false);
+    public final ConfigProperty<Boolean> showUsernameAsPhoneNumber = new ConfigProperty<>("showUsernameAsPhoneNumber", false);
     public final ConfigProperty<Boolean> hideOtherPhoneNumber = new ConfigProperty<>("hideOtherPhoneNumber", true);
     public final ConfigProperty<Boolean> promptBeforeCalling = new ConfigProperty<>("promptBeforeCalling", true);
     public final ConfigProperty<Integer> dcIdStyle = new ConfigProperty<>("dcIdStyle", DcIdStyle.MINIMAL);
@@ -45,7 +46,7 @@ public class OctoConfig {
     public final ConfigProperty<Boolean> playGifAsVideo = new ConfigProperty<>("playGifAsVideo", false);
     public final ConfigProperty<Boolean> hideKeyboardOnScroll = new ConfigProperty<>("hideKeyboardOnScroll", false);
     public final ConfigProperty<Boolean> hideSendAsChannel = new ConfigProperty<>("hideSendAsChannel", false);
-    public final ConfigProperty<Boolean> showOnlineStatus = new ConfigProperty<>("showOnlineStatus", true);
+    public final ConfigProperty<Boolean> showOnlineStatus = new ConfigProperty<>("showOnlineStatus", false);
     public final ConfigProperty<Boolean> hideCustomEmojis = new ConfigProperty<>("hideCustomEmojis", false);
     public final ConfigProperty<Boolean> activeNoiseSuppression = new ConfigProperty<>("activeNoiseSuppression", false);
     public final ConfigProperty<Boolean> unmuteVideosWithVolumeDown = new ConfigProperty<>("unmuteVideosWithVolumeDown", true);
@@ -96,6 +97,7 @@ public class OctoConfig {
     public final ConfigProperty<Integer> lastSelectedCompression = new ConfigProperty<>("lastSelectedCompression", 3);
     public final ConfigProperty<Integer> gcOutputType = new ConfigProperty<>("gcOutputType", 0);
     public final ConfigProperty<Boolean> mediaInGroupCall = new ConfigProperty<>("mediaInGroupCall", false);
+    public final ConfigProperty<Integer> maxRecentStickers = new ConfigProperty<>("maxRecentStickers", 0);
 
     private final List<ConfigProperty<?>> properties = List.of(
             hidePhoneNumber, showFakePhoneNumber, hideOtherPhoneNumber, promptBeforeCalling, dcIdStyle, dcIdType, registrationDateInProfiles,
@@ -106,7 +108,7 @@ public class OctoConfig {
             numberRounding, pencilIconForEditedMessages, searchIconInHeader, slidingTitle, eventType, useSystemFont,
             cameraXEnabled, cameraXPerfOverQuality, cameraXZeroShutter, cameraXResolution, unlockedYuki, unlockedChupa,
             experimentsEnabled, alternativeNavigation, uploadBoost, downloadBoost, downloadBoostValue, photoResolution,lastSelectedCompression,
-            tabletMode, maxStickerSize, gcOutputType, mediaInGroupCall
+            tabletMode, maxStickerSize, gcOutputType, mediaInGroupCall, maxRecentStickers
     );
 
 
@@ -121,6 +123,13 @@ public class OctoConfig {
         return AudioFormat.CHANNEL_OUT_MONO;
     }
 
+    public static int getMaxRecentSticker(int size) {
+        int[] sizes = {20, 30, 40, 50, 80, 100, 120, 150, 180, 200};
+        if (size >= 0 && size < sizes.length) {
+            return sizes[size];
+        }
+        return 20;
+    }
     /*
      * It is safe to suppress this warning because the method loadConfig() is only called once in the static block above.
      * Also the semantics of the data structure is pretty solid, so there is no need to worry about it.

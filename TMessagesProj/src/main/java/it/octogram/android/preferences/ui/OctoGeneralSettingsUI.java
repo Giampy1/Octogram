@@ -10,18 +10,20 @@ package it.octogram.android.preferences.ui;
 
 import android.content.Context;
 import android.util.Pair;
-import it.octogram.android.OctoConfig;
-import it.octogram.android.preferences.OctoPreferences;
-import it.octogram.android.preferences.PreferencesEntry;
-import it.octogram.android.preferences.rows.impl.FooterInformativeRow;
-import it.octogram.android.preferences.rows.impl.ListRow;
-import it.octogram.android.preferences.rows.impl.SwitchRow;
+
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.BaseFragment;
 
 import java.util.List;
+
+import it.octogram.android.OctoConfig;
+import it.octogram.android.preferences.OctoPreferences;
+import it.octogram.android.preferences.PreferencesEntry;
+import it.octogram.android.preferences.rows.impl.FooterInformativeRow;
+import it.octogram.android.preferences.rows.impl.ListRow;
+import it.octogram.android.preferences.rows.impl.SwitchRow;
 
 public class OctoGeneralSettingsUI implements PreferencesEntry {
 
@@ -48,6 +50,11 @@ public class OctoGeneralSettingsUI implements PreferencesEntry {
                             .showIf(OctoConfig.INSTANCE.hidePhoneNumber)
                             .build());
                     category.row(new SwitchRow.SwitchRowBuilder()
+                            .preferenceValue(OctoConfig.INSTANCE.showUsernameAsPhoneNumber)
+                            .title(LocaleController.formatString(R.string.ShowUsernameAsPhoneNumber))
+                            .description(LocaleController.formatString("ShowUsernameAsPhoneNumber_Desc", R.string.ShowUsernameAsPhoneNumber_Desc))
+                            .build());
+                    category.row(new SwitchRow.SwitchRowBuilder()
                             .preferenceValue(OctoConfig.INSTANCE.promptBeforeCalling)
                             .title(LocaleController.formatString("PromptBeforeCalling", R.string.PromptBeforeCalling))
                             .description(LocaleController.formatString("PromptBeforeCalling_Desc", R.string.PromptBeforeCalling_Desc))
@@ -62,6 +69,7 @@ public class OctoGeneralSettingsUI implements PreferencesEntry {
                                     new Pair<>(OctoConfig.DcIdStyle.OWLGRAM, "OwlGram"),
                                     new Pair<>(OctoConfig.DcIdStyle.TELEGRAM, "Telegram")
                             ))
+                            .postNotificationName(NotificationCenter.reloadInterface)
                             .title(LocaleController.formatString("Style", R.string.Style))
                             .build());
                     category.row(new ListRow.ListRowBuilder()
@@ -71,6 +79,7 @@ public class OctoGeneralSettingsUI implements PreferencesEntry {
                                     new Pair<>(OctoConfig.DcIdType.TELEGRAM, "Telegram")
                             ))
                             .title(LocaleController.formatString("Type", R.string.Type))
+                            .postNotificationName(NotificationCenter.reloadInterface)
                             .build());
                     category.row(new FooterInformativeRow.FooterInformativeRowBuilder()
                             .title(LocaleController.formatString("DcIdTypeDescription", R.string.DcIdTypeDescription))
@@ -79,7 +88,7 @@ public class OctoGeneralSettingsUI implements PreferencesEntry {
                             .preferenceValue(OctoConfig.INSTANCE.registrationDateInProfiles)
                             .title(LocaleController.formatString("ShowRegistrationDate", R.string.ShowRegistrationDate))
                             .description(LocaleController.formatString("ShowRegistrationDate_Desc", R.string.ShowRegistrationDate_Desc))
-                            .postNotificationName(NotificationCenter.mainUserInfoChanged, NotificationCenter.reloadInterface)
+                            .postNotificationName(NotificationCenter.reloadInterface)
                             .build());
                 })
                 .category(LocaleController.formatString("Chats", R.string.Chats), category -> {
